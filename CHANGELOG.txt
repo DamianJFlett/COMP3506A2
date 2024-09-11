@@ -1,0 +1,4 @@
+Version: 1.0
+Date: Wed 11 Sep 2024
+Desc: Initial release, aligned with spec v1.0.
+
