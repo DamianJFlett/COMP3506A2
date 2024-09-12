@@ -198,6 +198,7 @@ class DoublyLinkedList:
         while cur is not None:
             if cur.get_data() == elem:
                 return True
+            cur = cur.get_next()
         return False
 
     def find_and_return_element(self, elem: Any) -> Any | None:
@@ -209,6 +210,7 @@ class DoublyLinkedList:
         while cur is not None:
             if cur.get_data() == elem:
                 return cur.get_data()
+            cur = cur.get_next()
         return None
 
 
@@ -223,6 +225,7 @@ class DoublyLinkedList:
         while cur is not None:
             if cur.get_data() == elem:
                 break
+            cur = cur.get_next()
         # Not found - easy peasy
         if cur is None:
             return False

@@ -32,7 +32,7 @@ class PriorityQueue:
         """
         Given index ix, return the index of the parent
         """
-        return (ix) // 2
+        return (ix-1) // 2
 
     def insert(self, priority: int, data: Any) -> None:
         """
@@ -71,7 +71,7 @@ class PriorityQueue:
         """
         if self.is_empty():
             return None
-        return self._arr[0].get_key()
+        return self._arr[0].get_value()
 
     def remove_min(self) -> Any:
         """
@@ -84,7 +84,7 @@ class PriorityQueue:
         self._arr[0] = self._arr[self.get_size() - 1]
         self._arr.remove_at(self.get_size() - 1)
 
-        cur = 1
+        cur = 0
         while cur < self.get_size():
             left = cur * 2
             right = cur * 2 + 1

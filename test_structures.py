@@ -27,10 +27,50 @@ def test_pqueue() -> None:
     This is not marked and is just here for you to test your code.
     """
     print("==== Executing Priority Queue Tests ====")
+    #normal insertion
     my_pq = PriorityQueue()
     my_pq.insert(0, "highest priority item")
     my_pq.insert(10, "priority value 10 item")
-    assert my_pq.get_size() == 2
+    assert(my_pq.get_min_priority() == 0)
+    assert(my_pq.get_min_value() == "highest priority item")
+    assert(my_pq.get_size() == 2)
+    my_pq.remove_min()
+    assert(my_pq.get_size() == 1)
+    assert(my_pq.get_min_priority() == 10)
+    assert(my_pq.get_min_value() == "priority value 10 item")
+    assert(not my_pq.is_empty())
+
+    #fifo
+    pq2 = PriorityQueue()
+    assert(pq2.is_empty())
+    pq2.insert_fifo("I")
+    pq2.insert_fifo("love")
+    pq2.insert_fifo("men")
+    assert(pq2.get_size() == 3)
+    assert(not pq2.is_empty())
+    assert(pq2.remove_min() == "I")
+    assert(pq2.get_size() == 2)
+    assert(pq2.get_min_value() == "love")
+    assert(pq2.remove_min() == "love")
+    assert(pq2.remove_min() == "men")
+
+
+    #some fuzz testing - fifo insertion
+    pq3 = PriorityQueue()
+    nth = []
+    for i in range(1, 10000):
+        if random.randint(0, 1) == 1:
+            pq3.insert_fifo(i)
+            nth.append(i)
+        else:
+            pq3.insert_fifo(0)
+            nth.append(0)
+    for i in range(1, 10000):
+        print(nth[0])
+        print(pq3.get_min_value())
+        assert(pq3.remove_min() == nth[0])
+        nth = nth[1:]
+    
 
     """
     This one is up to you - we provided most of the code already :-)

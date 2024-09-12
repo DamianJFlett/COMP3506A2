@@ -20,6 +20,7 @@ get_hash function to return -1 for example.
 
 from typing import Any
 from structures.entry import Entry
+from structures.dynamic_array import DynamicArray
 
 class Map:
     """
@@ -33,7 +34,8 @@ class Map:
         You are free to make any changes you find suitable in this function
         to initialise your map.
         """
-        pass
+        self._arr = DynamicArray()
+        self._size = 0
 
     def insert(self, entry: Entry) -> Any | None:
         """
