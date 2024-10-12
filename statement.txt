@@ -1,1 +1,3 @@
 This work is entirely my own, save for other examples cited here:
+[1] algorithm for heapifying, refernenced in code, was inspired by https://favtutor.com/blogs/heap-in-python. 
+Code ideas for this part are also taken from the above remove_min function in terms of heapifying

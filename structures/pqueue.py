@@ -87,7 +87,7 @@ class PriorityQueue:
         cur = 0
         while cur < self.get_size():
             left = cur * 2 + 1
-            right = cur * 2 + 2Z    
+            right = cur * 2 + 2   
 
             smallest = cur
             if left < self.get_size() and self._arr[smallest].get_key() > self._arr[left].get_key():
@@ -125,6 +125,22 @@ class PriorityQueue:
         only O(1) extra space.
         """
         self._arr = input_list
+        n = int(self.get_size() //2 -1) # algorithm inspired by reference [1] in statement.txt
+        for k in range(n,-1,-1):
+            self._heapify(k)
+
+    def _heapify(self, k: int) -> None:
+        left, right = 2*k+1, 2*k+2
+        if left < self.get_size() and self._arr[left].get_key() < self._arr[k].get_key():
+            smallest = left
+        else:
+            smallest = k
+        if right < self.get_size() and self._arr[right].get_key() < self._arr[smallest].get_key():
+            smallest = right
+        if smallest != k:
+            self._arr[k], self._arr[smallest] = self._arr[smallest], self._arr[k]
+            self._heapify(smallest)
+
 
     def sort(self) -> DynamicArray:
         """

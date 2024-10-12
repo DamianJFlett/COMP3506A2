@@ -70,16 +70,18 @@ def test_pqueue() -> None:
         nth = nth[1:]
     
     my_dy_list = DynamicArray()
-    my_dy_list.build_from_list([Entry(1,1) ,Entry(2, 2), Entry(3,3)])
+    my_dy_list.build_from_list([Entry(6,6),Entry(2, 2), Entry(3,3), Entry(1,1),Entry(5,5), Entry(4,4)])
 
     pq4 = PriorityQueue()
     pq4.ip_build(my_dy_list)
+    print(pq4._arr)
     assert(pq4.remove_min() == 1)
     assert(pq4.remove_min() == 2)
+    assert(pq4.remove_min() == 3)
+
     """
     This one is up to you - we provided most of the code already :-)
     """
-
 
 def test_map() -> None:
     """
