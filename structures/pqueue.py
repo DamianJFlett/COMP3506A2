@@ -86,8 +86,8 @@ class PriorityQueue:
 
         cur = 0
         while cur < self.get_size():
-            left = cur * 2
-            right = cur * 2 + 1
+            left = cur * 2 + 1
+            right = cur * 2 + 2Z    
 
             smallest = cur
             if left < self.get_size() and self._arr[smallest].get_key() > self._arr[left].get_key():
@@ -124,6 +124,7 @@ class PriorityQueue:
         use the DynamicArray build_from_list function. You must use
         only O(1) extra space.
         """
+        self._arr = input_list
 
     def sort(self) -> DynamicArray:
         """

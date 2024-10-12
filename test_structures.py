@@ -66,12 +66,16 @@ def test_pqueue() -> None:
             pq3.insert_fifo(0)
             nth.append(0)
     for i in range(1, 10000):
-        print(nth[0])
-        print(pq3.get_min_value())
         assert(pq3.remove_min() == nth[0])
         nth = nth[1:]
     
+    my_dy_list = DynamicArray()
+    my_dy_list.build_from_list([Entry(1,1) ,Entry(2, 2), Entry(3,3)])
 
+    pq4 = PriorityQueue()
+    pq4.ip_build(my_dy_list)
+    assert(pq4.remove_min() == 1)
+    assert(pq4.remove_min() == 2)
     """
     This one is up to you - we provided most of the code already :-)
     """
