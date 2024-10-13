@@ -21,6 +21,7 @@ get_hash function to return -1 for example.
 from typing import Any
 from structures.entry import Entry
 from structures.dynamic_array import DynamicArray
+from structures.linked_list import DoublyLinkedList
 
 class Map:
     """
@@ -34,7 +35,12 @@ class Map:
         You are free to make any changes you find suitable in this function
         to initialise your map.
         """
+        self._primes = [79, 997, 2477, 7477, 47251, 444443, 999983,
+                        2000003, 4000037, 8003143]
+        self._prime_index = 0
         self._arr = DynamicArray()
+        self._arr.build_from_list(
+            [DoublyLinkedList() for _ in range(self._primes[0])])
         self._size = 0
 
     def insert(self, entry: Entry) -> Any | None:
@@ -44,7 +50,7 @@ class Map:
         None otherwise. (We will not use None as a key or a value in our tests).
         Time complexity for full marks: O(1*)
         """
-        self.insert_kv(entry.get_key(),entry.get_value())
+        self.insert_kv(entry.get_key(), entry.get_value())
 
     def insert_kv(self, key: Any, value: Any) -> Any | None:
         """
@@ -55,6 +61,9 @@ class Map:
         Time complexity for full marks: O(1*)
         """
         pass
+
+    def _compress(self, key: Any) -> int:
+        return key % self._primes[self._prime_index]
 
     def __setitem__(self, key: Any, value: Any) -> None:
         """

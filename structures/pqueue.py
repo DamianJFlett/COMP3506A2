@@ -8,6 +8,7 @@ from typing import Any
 from structures.entry import Entry
 from structures.dynamic_array import DynamicArray
 
+
 class PriorityQueue:
     """
     An implementation of the PriorityQueue ADT. We have used the implicit
@@ -20,7 +21,7 @@ class PriorityQueue:
     Values are called "data" and store the payload data of interest.
     We use the Entry types to store (k, v) pairs.
     """
-    
+
     def __init__(self):
         """
         Empty construction
@@ -87,8 +88,7 @@ class PriorityQueue:
         cur = 0
         while cur < self.get_size():
             left = cur * 2 + 1
-            right = cur * 2 + 2   
-
+            right = cur * 2 + 2
             smallest = cur
             if left < self.get_size() and self._arr[smallest].get_key() > self._arr[left].get_key():
                 smallest = left
@@ -125,14 +125,14 @@ class PriorityQueue:
         only O(1) extra space.
         """
         self._arr = input_list
-        n = int(self.get_size() //2 -1) # algorithm based on modified version of reference [1] in statement.txt
-        for k in range(n,-1,-1):
+        n = int(self.get_size() // 2 - 1)  # algorithm based on modified version of reference [1] in statement.txt
+        for k in range(n, -1, -1):
             self._heapify(self.get_size(), k)
 
     def _heapify(self, n, k: int) -> None: 
         #  using the size as a paramter instead of just hard using size is done so
         #  that we can heapify sub arrays in sort()
-        left, right = 2*k+1, 2*k+2          
+        left, right = 2*k+1, 2*k+2
         if left < n and self._arr[left].get_key() < self._arr[k].get_key():
             smallest = left
         else:
@@ -141,8 +141,7 @@ class PriorityQueue:
             smallest = right
         if smallest != k:
             self._arr[k], self._arr[smallest] = self._arr[smallest], self._arr[k]
-            self._heapify(n,smallest)
-
+            self._heapify(n, smallest)
 
     def sort(self) -> DynamicArray:
         """
@@ -159,4 +158,3 @@ class PriorityQueue:
             self._arr[i], self._arr[0] = self._arr[0], self._arr[i]
             self._heapify(i,0)
         return self._arr
-

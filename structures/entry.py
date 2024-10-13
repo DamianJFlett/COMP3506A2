@@ -70,7 +70,9 @@ class Entry(Hashable):
         assignment, your universe could be something like integers in
         [0, 2^32-1].
         """
-        byte_array = object_to_byte_array(self)
+        byte_array = object_to_byte_array(self._key)
+        return int.from_bytes(byte_array)
+
 
 class Compound:
     """
