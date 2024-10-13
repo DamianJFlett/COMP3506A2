@@ -44,7 +44,7 @@ class Map:
         None otherwise. (We will not use None as a key or a value in our tests).
         Time complexity for full marks: O(1*)
         """
-        pass
+        self.insert_kv(entry.get_key(),entry.get_value())
 
     def insert_kv(self, key: Any, value: Any) -> Any | None:
         """
@@ -54,7 +54,6 @@ class Map:
         in mind. You can modify this if you want, as long as it behaves.
         Time complexity for full marks: O(1*)
         """
-        #hint: entry = Entry(key, value)
         pass
 
     def __setitem__(self, key: Any, value: Any) -> None:
@@ -64,7 +63,7 @@ class Map:
         anything. Can be used like: my_map[some_key] = some_value
         Time complexity for full marks: O(1*)
         """
-        pass
+        self.insert_kv(key, value)
 
     def remove(self, key: Any) -> None:
         """
@@ -88,16 +87,16 @@ class Map:
         for find()
         Time complexity for full marks: O(1*)
         """
-        pass
+        return self.find(key)
 
     def get_size(self) -> int:
         """
         Time complexity for full marks: O(1)
         """
-        pass
+        return self._size
 
     def is_empty(self) -> bool:
         """
         Time complexity for full marks: O(1)
         """
-        pass
+        return self._size == 0

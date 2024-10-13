@@ -125,7 +125,7 @@ class PriorityQueue:
         only O(1) extra space.
         """
         self._arr = input_list
-        n = int(self.get_size() //2 -1) # algorithm inspired by reference [1] in statement.txt
+        n = int(self.get_size() //2 -1) # algorithm based on modified version of reference [1] in statement.txt
         for k in range(n,-1,-1):
             self._heapify(self.get_size(), k)
 
