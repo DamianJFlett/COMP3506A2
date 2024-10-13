@@ -79,6 +79,12 @@ def test_pqueue() -> None:
     assert(pq4.remove_min() == 2)
     assert(pq4.remove_min() == 3)
 
+    my_dy_list2 = DynamicArray()
+    my_dy_list2.build_from_list([Entry(1,6),Entry(2, 2), Entry(3,3), Entry(4,1),Entry(5,5), Entry(6,4)])
+    pq5 = PriorityQueue()
+    pq5.ip_build(my_dy_list2)
+    elems_sorted = pq5.sort()
+    print(elems_sorted)
     """
     This one is up to you - we provided most of the code already :-)
     """

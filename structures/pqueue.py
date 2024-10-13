@@ -127,19 +127,21 @@ class PriorityQueue:
         self._arr = input_list
         n = int(self.get_size() //2 -1) # algorithm inspired by reference [1] in statement.txt
         for k in range(n,-1,-1):
-            self._heapify(k)
+            self._heapify(self.get_size(), k)
 
-    def _heapify(self, k: int) -> None:
-        left, right = 2*k+1, 2*k+2
-        if left < self.get_size() and self._arr[left].get_key() < self._arr[k].get_key():
+    def _heapify(self, n, k: int) -> None: 
+        #  using the size as a paramter instead of just hard using size is done so
+        #  that we can heapify sub arrays in sort()
+        left, right = 2*k+1, 2*k+2          
+        if left < n and self._arr[left].get_key() < self._arr[k].get_key():
             smallest = left
         else:
             smallest = k
-        if right < self.get_size() and self._arr[right].get_key() < self._arr[smallest].get_key():
+        if right < n and self._arr[right].get_key() < self._arr[smallest].get_key():
             smallest = right
         if smallest != k:
             self._arr[k], self._arr[smallest] = self._arr[smallest], self._arr[k]
-            self._heapify(smallest)
+            self._heapify(n,smallest)
 
 
     def sort(self) -> DynamicArray:
@@ -153,4 +155,8 @@ class PriorityQueue:
         destroyed and will not be used again (hence returning the underlying
         array back to the caller).
         """
+        for i in range(self.get_size()-1, 0, -1):
+            self._arr[i], self._arr[0] = self._arr[0], self._arr[i]
+            self._heapify(i,0)
         return self._arr
+

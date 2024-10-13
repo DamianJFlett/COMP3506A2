@@ -36,9 +36,8 @@ def bfs_traversal(
     visited_order = DynamicArray()
     # Stores the path from the origin to the goal
     path = DynamicArray()
-
     # ALGO GOES HERE
-
+    
     # Return the path and the visited nodes list
     return (path, visited_order)
 
