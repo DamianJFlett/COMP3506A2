@@ -53,7 +53,7 @@ def test_pqueue() -> None:
     assert(pq2.get_min_value() == "love")
     assert(pq2.remove_min() == "love")
     assert(pq2.remove_min() == "men")
-
+    assert(pq2.is_empty())
 
     #some fuzz testing - fifo insertion
     pq3 = PriorityQueue()

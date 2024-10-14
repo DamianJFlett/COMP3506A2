@@ -14,6 +14,7 @@ from structures.pqueue import PriorityQueue
 from structures.bloom_filter import BloomFilter
 from structures.util import Hashable
 
+
 def bfs_traversal(
     graph: Graph | LatticeGraph, origin: int, goal: int
     ) -> tuple[DynamicArray, DynamicArray]:
@@ -36,11 +37,29 @@ def bfs_traversal(
     visited_order = DynamicArray()
     # Stores the path from the origin to the goal
     path = DynamicArray()
+    pred = Map()
+    seen = Map()  # glorified set of keys
     # ALGO GOES HERE
     queue = PriorityQueue()
-    queue.append(origin)
+    queue.insert_fifo(origin)
+    pred[origin] = "Root"
     while not queue.is_empty():
-        
+        removed = queue.remove_min()
+        if not seen.find(removed):
+            visited_order.append(removed)
+            seen[removed] = "junk"
+        if removed == goal:
+            cur = goal
+            while pred[cur] != "Root":
+                path.prepend(cur)
+                cur = pred[cur]
+            path.prepend(origin)
+            break
+        for node in graph.get_neighbours(removed):
+            neighbour = node.get_id()
+            if not pred.find(neighbour):
+                pred[neighbour] = removed
+                queue.insert_fifo(neighbour)
     
     # Return the path and the visited nodes list
     return (path, visited_order)

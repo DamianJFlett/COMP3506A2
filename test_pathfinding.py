@@ -24,6 +24,7 @@ from structures.dynamic_array import DynamicArray
 # Configuration: The time (in seconds) to sleep between moves in the viz
 ADVANCE = 0.01  # 10ms
 
+
 class MazeDraw:
     """
     This class handles drawing of mazes. It is best that you leave it alone

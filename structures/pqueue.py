@@ -114,7 +114,7 @@ class PriorityQueue:
         """
         Ditto above
         """
-        return self._arr.is_empty()
+        return self.get_size() == 0
 
     def ip_build(self, input_list: DynamicArray) -> None:
         """

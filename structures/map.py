@@ -100,7 +100,7 @@ class Map:
 
     def _get_hash(self, key: Any) -> int:
         byte_array = object_to_byte_array(key)
-        return int.from_bytes(byte_array, byteorder='big') # byteorder only default argument as of 3.11, autograder 3.10
+        return int.from_bytes(byte_array, byteorder='big')
 
     def _compress(self, key: Any) -> int:
         return key % self._primes[self._prime_index]
@@ -123,7 +123,7 @@ class Map:
         data structure. Don't return anything.
         Time complexity for full marks: O(1*)
         """
-        if self._arr[self._compress(self._get_hash(key))].find_and_remove_element(key):
+        if self._arr[self._compress(self._get_hash(key))].find_and_remove_element(Entry(key, self[key])):
             self._size -= 1
 
     def find(self, key: Any) -> Any | None:
