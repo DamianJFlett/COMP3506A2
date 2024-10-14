@@ -85,16 +85,23 @@ def dijkstra_traversal(graph: Graph, origin: int) -> DynamicArray:
     queue = PriorityQueue()
     valid_locations = DynamicArray()  # This holds your answers
     distances = Map()
-    valid_locations.append(Entry(origin, 0))
+    seen = Map()
     distances[origin] = 0
-    seen = Map() #  glorified set, yada yada
     queue.insert_fifo(origin)
+    seen[origin] = 1
     while not queue.is_empty():
         removed = queue.remove_min()
+        valid_locations.append(Entry(removed, distances[removed]))
         for node, weight in graph.get_neighbours(removed):
-            id = node.get_id()
-            
-    # ALGO GOES HERE
+            node_id = node.get_id()
+            if distances.find(node):
+                if distances[removed] + weight < distances[node_id]:
+                    distances[node_id] = distances[removed] + weight
+            else:
+                distances[node_id] = distances[removed] + weight
+            if not seen.find(node_id):
+                queue.insert_fifo(node_id)
+                seen[node_id] = 1
 
     # Return the DynamicArray containing Entry types
     return valid_locations
