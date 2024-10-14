@@ -123,7 +123,7 @@ class Map:
         data structure. Don't return anything.
         Time complexity for full marks: O(1*)
         """
-        if self._arr[self._compress(self._get_hash(key))].find_and_remove_element(Entry(key, self[key])):
+        if self._arr[self._compress(self._get_hash(key))].find_and_remove_element(key):
             self._size -= 1
 
     def find(self, key: Any) -> Any | None:

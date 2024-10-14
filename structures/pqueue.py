@@ -129,7 +129,7 @@ class PriorityQueue:
         for k in range(n, -1, -1):
             self._heapify(self.get_size(), k)
 
-    def _heapify(self, n, k: int) -> None: 
+    def _heapify(self, n, k: int) -> None:
         #  using the size as a paramter instead of just hard using size is done so
         #  that we can heapify sub arrays in sort()
         left, right = 2*k+1, 2*k+2
@@ -156,5 +156,5 @@ class PriorityQueue:
         """
         for i in range(self.get_size()-1, 0, -1):
             self._arr[i], self._arr[0] = self._arr[0], self._arr[i]
-            self._heapify(i,0)
+            self._heapify(i, 0)
         return self._arr

@@ -37,6 +37,10 @@ def bfs_traversal(
     # Stores the path from the origin to the goal
     path = DynamicArray()
     # ALGO GOES HERE
+    queue = PriorityQueue()
+    queue.append(origin)
+    while not queue.is_empty():
+        
     
     # Return the path and the visited nodes list
     return (path, visited_order)
