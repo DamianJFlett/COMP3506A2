@@ -24,7 +24,6 @@ from structures.dynamic_array import DynamicArray
 # Configuration: The time (in seconds) to sleep between moves in the viz
 ADVANCE = 0.01  # 10ms
 
-
 class MazeDraw:
     """
     This class handles drawing of mazes. It is best that you leave it alone
@@ -225,6 +224,10 @@ if __name__ == "__main__":
 
     # Visualize the output
     if args.viz:
+        # Bail out
+        if args.dijkstra:
+            raise Exception("Sorry, Dijkstra only works with POSW graphs")        
+
         # Double check we have a lattice graph!
         my_graph = LatticeGraph()
         my_graph.from_file(args.graph)
@@ -237,8 +240,6 @@ if __name__ == "__main__":
             path, visited = bfs_traversal(my_graph, origin, goal)
         elif args.dfs:
             path, visited = dfs_traversal(my_graph, origin, goal)
-        elif args.dijkstra:
-            path, visited = dijkstra_traversal(my_graph, origin, goal)
 
         # Run the viz!
         maze.run_viz(path, visited)
@@ -278,10 +279,12 @@ if __name__ == "__main__":
         elif args.dfs:
             path, visited = dfs_traversal(my_graph, origin, goal)
         elif args.dijkstra:
-            path, visited = dijkstra_traversal(my_graph, origin, goal)
+            path = dijkstra_traversal(my_graph, origin)
+            goal = None
+            visited = None
 
         print("===Traversal Complete===")
         print("Origin: ", str(origin))
         print("Goal: ", str(goal))
-        print("Path: ", str(path))
+        print("Path (or costs for Dijkstra): ", str(path))
         print("Visited: ", str(visited))

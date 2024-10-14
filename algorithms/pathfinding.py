@@ -65,37 +65,39 @@ def bfs_traversal(
     return (path, visited_order)
 
 
-def dijkstra_traversal(
-    graph: Graph, origin: int, goal: int
-    ) -> tuple[DynamicArray, DynamicArray]:
+def dijkstra_traversal(graph: Graph, origin: int) -> DynamicArray:
     """
     Task 2.2: Dijkstra Traversal
 
     @param: graph
       The *weighted* graph to process (POSW graphs)
     @param: origin
-      The ID of the node from which to start traversal
-    @param: goal
-      The ID of the target node
+      The ID of the node from which to start traversal.
 
-    @returns: tuple[DynamicArray, DynamicArray]
-      1. The ordered path between the origin and the goal in node IDs;
-      2. The IDs of all nodes in the order they were visited.
+    @returns: DynamicArray containing Entry types.
+      The Entry key is a node identifier, Entry value is the cost of the
+      shortest path to this node from the origin.
 
     NOTE: Dijkstra does not work (by default) on LatticeGraph types.
     This is because there is no inherent weight on an edge of these
     graphs. It should of course work where edge weights are uniform.
     """
-
-    # Stores the keys of the nodes in the order they were visited
-    visited_order = DynamicArray()
-    # Stores the path from the origin to the goal
-    path = DynamicArray()
-
+    queue = PriorityQueue()
+    valid_locations = DynamicArray()  # This holds your answers
+    distances = Map()
+    valid_locations.append(Entry(origin, 0))
+    distances[origin] = 0
+    seen = Map() #  glorified set, yada yada
+    queue.insert_fifo(origin)
+    while not queue.is_empty():
+        removed = queue.remove_min()
+        for node, weight in graph.get_neighbours(removed):
+            id = node.get_id()
+            
     # ALGO GOES HERE
 
-    # Return the path and the visited nodes list
-    return (path, visited_order)
+    # Return the DynamicArray containing Entry types
+    return valid_locations
 
 
 def dfs_traversal(
@@ -127,7 +129,6 @@ def dfs_traversal(
 
     # Return the path and the visited nodes list
     return (path, visited_order)
-
 
 
 
