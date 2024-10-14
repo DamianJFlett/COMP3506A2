@@ -81,7 +81,7 @@ class Map:
         while chain_cur:
             if chain_cur.get_data().get_key() == key:
                 old_value = chain_cur.get_data().get_value()
-                chain_cur.set_data(entry.get_value())
+                chain_cur.set_data(entry)
                 return old_value 
             chain_cur = chain_cur.get_next()
         self._arr[self._compress(self._get_hash(key))].insert_to_back(entry)
@@ -100,7 +100,7 @@ class Map:
 
     def _get_hash(self, key: Any) -> int:
         byte_array = object_to_byte_array(key)
-        return int.from_bytes(byte_array)
+        return int.from_bytes(byte_array, byteorder='big') # byteorder only default argument as of 3.11, autograder 3.10
 
     def _compress(self, key: Any) -> int:
         return key % self._primes[self._prime_index]
