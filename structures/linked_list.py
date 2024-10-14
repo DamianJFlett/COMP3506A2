@@ -59,6 +59,8 @@ class DoublyLinkedList:
         A helper that allows you to print a DoublyLinkedList type
         via the str() method.
         """
+        if self._size == 0:
+            return "[]"
         list_str = "[HEAD] "
         cur = self._head
         # handle special head print

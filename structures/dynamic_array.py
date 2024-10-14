@@ -27,7 +27,7 @@ class DynamicArray:
         """
         string_rep = "["
         for elem in self._data:
-            string_rep += str(elem) + ", "
+            string_rep += (str(elem) + ", ")
         string_rep += "]"
         return string_rep
 

@@ -107,6 +107,8 @@ def test_map() -> None:
     my_map.insert_kv(2, "Barry rules")
     my_map[3] = "value_for_key_3"
     assert my_map.get_size() == 4
+    assert my_map[1] == "value_for_key_1"
+    assert(my_map[2] == "Barry rules")
 
     """
     OK, simple boring hand written tests don't really find bugs... Just
@@ -115,6 +117,14 @@ def test_map() -> None:
     to make sure your data structure works. Make sure you capture all functions
     including any resizing that is done.
     """
+    my_dict = {}
+    my_map2 = Map()
+    for i in range(1, 100000):
+        my_map2.insert_kv(i, 3*i-1)
+        my_dict[i] = 3*i-1
+    for i in range(1, 100000):
+        print(i, my_map2[i])
+        assert my_dict[i] == my_map2[i]
     
 
 

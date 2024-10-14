@@ -22,6 +22,7 @@ from typing import Any
 from structures.entry import Entry
 from structures.dynamic_array import DynamicArray
 from structures.linked_list import DoublyLinkedList
+from structures.util import object_to_byte_array
 
 class Map:
     """
@@ -43,6 +44,25 @@ class Map:
             [DoublyLinkedList() for _ in range(self._primes[0])])
         self._size = 0
 
+    def _rehash(self):
+        self._prime_index += 1
+        while self._arr.get_size() < self._primes[self._prime_index]:
+            self._arr.append(DoublyLinkedList())
+
+        for i in range(self._primes[self._prime_index - 1]):
+            chain = self._arr[i]
+            chain_cur = chain.get_head_node()
+            
+            while chain_cur:
+                entry = chain_cur.get_data()
+                new_index = self._compress(self._get_hash(entry.get_key()))
+                
+                if new_index != i:
+                    self._arr[i].find_and_remove_element(entry)
+                    self._arr[new_index].insert_to_back(entry)
+                
+                chain_cur = chain_cur.get_next()
+
     def insert(self, entry: Entry) -> Any | None:
         """
         Associate value v with key k for efficient lookups. If k already exists
@@ -50,7 +70,22 @@ class Map:
         None otherwise. (We will not use None as a key or a value in our tests).
         Time complexity for full marks: O(1*)
         """
-        self.insert_kv(entry.get_key(), entry.get_value())
+        key = entry.get_key()
+        if self.get_load_factor() > 1:
+            self._rehash()
+        chain_cur = self._arr[self._compress(self._get_hash(key))].get_head_node()
+        if not chain_cur:
+            self._arr[self._compress(self._get_hash(key))].insert_to_back(entry)
+            self._size += 1
+            return
+        while chain_cur:
+            if chain_cur.get_data().get_key() == key:
+                old_value = chain_cur.get_data().get_value()
+                chain_cur.set_data(entry.get_value())
+                return old_value 
+            chain_cur = chain_cur.get_next()
+        self._arr[self._compress(self._get_hash(key))].insert_to_back(entry)
+        self._size += 1
 
     def insert_kv(self, key: Any, value: Any) -> Any | None:
         """
@@ -60,7 +95,12 @@ class Map:
         in mind. You can modify this if you want, as long as it behaves.
         Time complexity for full marks: O(1*)
         """
-        pass
+        entry = Entry(key, value)
+        self.insert(entry)
+
+    def _get_hash(self, key: Any) -> int:
+        byte_array = object_to_byte_array(key)
+        return int.from_bytes(byte_array)
 
     def _compress(self, key: Any) -> int:
         return key % self._primes[self._prime_index]
@@ -74,13 +114,17 @@ class Map:
         """
         self.insert_kv(key, value)
 
+    def get_load_factor(self) -> float:
+        return self.get_size() / self._primes[self._prime_index]
+
     def remove(self, key: Any) -> None:
         """
         Remove the key/value pair corresponding to key k from the
         data structure. Don't return anything.
         Time complexity for full marks: O(1*)
         """
-        pass
+        if self._arr[self._compress(self._get_hash(key))].find_and_remove_element(Entry(key, self[key])):
+            self._size -= 1
 
     def find(self, key: Any) -> Any | None:
         """
@@ -88,7 +132,12 @@ class Map:
         exists; return None otherwise.
         Time complexity for full marks: O(1*)
         """
-        pass
+        chain_cur = self._arr[self._compress(self._get_hash(key))].get_head_node()
+        while chain_cur:
+            if chain_cur.get_data().get_key() == key:
+                return chain_cur.get_data().get_value() 
+            chain_cur = chain_cur.get_next()
+        return
 
     def __getitem__(self, key: Any) -> Any | None:
         """
