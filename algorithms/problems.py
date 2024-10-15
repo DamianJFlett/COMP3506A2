@@ -67,9 +67,14 @@ def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
     You must pass each test in the given time limit and be under the given
     fp_rate to get the associated mark for that test.
     """
-    answer = [] 
+    answer = []  
 
-    # DO THE THING
+    bf = BloomFilter()
+    for kmer in database:
+        bf.insert(kmer)
+    for kmer in query:
+        if bf.contains(kmer):
+            answer += kmer
 
     return answer
 

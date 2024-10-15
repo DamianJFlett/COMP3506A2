@@ -44,7 +44,7 @@ class BloomFilter:
         self._data = BitVector()
         self.max_keys = max_keys # See reference [2] here - This is where the formulas came from
         # More variables here if you need, of course
-        self._fp_rate = 0.01
+        self._fp_rate = 0.275
         self._bit_array_size =int(ceil(-max_keys*log(self._fp_rate) / log(2)**2))
         self._data.allocate(self._bit_array_size)
         self._num_hashes = int(ceil(self._bit_array_size / self.max_keys * log(2)))
@@ -87,7 +87,7 @@ class BloomFilter:
         Time complexity for full marks: O(1)
         """
         for i in range(self._num_hashes):
-            if self._data.get_at(self.mad_hash(key, i)) == False:
+            if self._data.get_at(self.mad_hash(key, i)) == 0:
                 return False
         return True
 
