@@ -6,6 +6,7 @@ Joel Mackenzie and Vladimir Morozov
 
 from typing import Any
 from structures.bit_vector import BitVector
+from math import ceil, log
 
 class BloomFilter:
     """
@@ -35,9 +36,14 @@ class BloomFilter:
         # You should use max_keys to decide how many bits your bitvector
         # should have, and allocate it accordingly.
         self._data = BitVector()
-        
+        self.max_keys = max_keys # See reference [2] here - This is where the formulas came from
         # More variables here if you need, of course
-    
+        self._fp_rate = 0.01
+        self._bit_array_size =int(ceil(-max_keys*log(self._fp_rate) / log(2)**2))
+        self._data.allocate(self._bit_array_size)
+        self._num_hashes = int(ceil(self._bit_array_size / self.max_keys * log(2)))
+        self._empty = False
+
     def __str__(self) -> str:
         """
         A helper that allows you to print a BloomFilter type
@@ -51,7 +57,8 @@ class BloomFilter:
         Insert a key into the Bloom filter.
         Time complexity for full marks: O(1)
         """
-        pass
+        self._empty = True
+
 
     def contains(self, key: Any) -> bool:
         """
@@ -67,13 +74,14 @@ class BloomFilter:
         `if key in my_bloom_filter:`
         Time complexity for full marks: O(1)
         """
+        return self.contains(key)
 
     def is_empty(self) -> bool:
         """
         Boolean helper to tell us if the structure is empty or not
         Time complexity for full marks: O(1)
         """
-        pass
+        return self._empty
 
     def get_capacity(self) -> int:
         """
@@ -81,5 +89,5 @@ class BloomFilter:
         BitVector can currently maintain.
         Time complexity for full marks: O(1)
         """
-        pass
+        return self._bit_array_size
 

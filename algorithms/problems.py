@@ -33,7 +33,8 @@ from structures.map import Map
 from structures.pqueue import PriorityQueue
 from structures.bloom_filter import BloomFilter
 from structures.util import Hashable
-
+from pathfinding import bfs_traversal
+from math import sqrt
 
 
 def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
@@ -149,8 +150,17 @@ def chain_reaction(compounds: list[Compound]) -> int:
     maximal_compound = -1
     
     # DO THE THING
-
+    results = Map() # store number reacted with 
+    for compound in compounds:
+        id = compound.get_compound_id()
+        pass
     return maximal_compound
+
+def _in_rad(x1, y1, x2, y2, r):
+    if sqrt((x1-x2)**2+(y1-y2)**2) < r:
+        return True
+    else:
+        return False
 
 
 def labyrinth(offers: list[Offer]) -> tuple[int, int]:
@@ -190,8 +200,13 @@ def labyrinth(offers: list[Offer]) -> tuple[int, int]:
     best_offer_id = -1
     best_offer_cost = float('inf')
 
-    # DO THE THING
+    for offer in offers:
+        if is_valid(offer) and offer.get_cost() < best_offer_cost:
+            best_offer_id = offer.get_offer_id()
+            best_offer_cost = offer.get_cost()
 
     return (best_offer_id, best_offer_cost)
 
+def is_valid(offer: Offer) -> bool:
+    pass
 

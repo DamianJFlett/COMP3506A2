@@ -82,30 +82,74 @@ def dijkstra_traversal(graph: Graph, origin: int) -> DynamicArray:
     This is because there is no inherent weight on an edge of these
     graphs. It should of course work where edge weights are uniform.
     """
+def dijkstra_traversal(graph: Graph, origin: int) -> DynamicArray:
+    """
+    Task 2.2: Dijkstra Traversal
+
+    @param: graph
+      The *weighted* graph to process (POSW graphs)
+    @param: origin
+      The ID of the node from which to start traversal.
+
+    @returns: DynamicArray containing Entry types.
+      The Entry key is a node identifier, Entry value is the cost of the
+      shortest path to this node from the origin.
+
+    NOTE: Dijkstra does not work (by default) on LatticeGraph types.
+    This is because there is no inherent weight on an edge of these
+    graphs. It should of course work where edge weights are uniform.
+    """
+
+    #  I'm sure like 50% of this is redundant but it passes the tests and i'm not spending another second of my life on this
     queue = PriorityQueue()
     valid_locations = DynamicArray()  # This holds your answers
-    distances = Map()
+    distances = _inf_map(graph, origin)
     seen = Map()
     distances[origin] = 0
-    queue.insert_fifo(origin)
+    queue.insert(0, origin)
     seen[origin] = 1
     while not queue.is_empty():
+        removed_weight = queue.get_min_priority()
         removed = queue.remove_min()
-        valid_locations.append(Entry(removed, distances[removed]))
+        if not seen.find(removed):
+            valid_locations.append(Entry(removed, distances[removed]))
+        seen[removed] = "junk"
         for node, weight in graph.get_neighbours(removed):
             node_id = node.get_id()
-            if distances.find(node):
-                if distances[removed] + weight < distances[node_id]:
-                    distances[node_id] = distances[removed] + weight
-            else:
-                distances[node_id] = distances[removed] + weight
             if not seen.find(node_id):
-                queue.insert_fifo(node_id)
-                seen[node_id] = 1
-
+                new_dist = weight + removed_weight
+                if new_dist < distances[node_id]:
+                    distances[node_id] = new_dist
+                    queue.insert(new_dist, node_id)
     # Return the DynamicArray containing Entry types
     return valid_locations
 
+def _inf_map(graph, origin):
+    """
+    Horror code copying to iterate through and get all the nodes, outputting a map where all of them are mapped to inf
+    """
+    # Stores the keys of the nodes in the order they were visited
+    # Stores the path from the origin to the goal
+    pred = Map()
+    seen = Map()  # glorified set of keys
+    inf_map = Map()
+    # ALGO GOES HERE
+    queue = PriorityQueue()
+    queue.insert_fifo(origin)
+    pred[origin] = "Root"
+    while not queue.is_empty():
+        removed = queue.remove_min()
+        if not seen.find(removed):
+            inf_map[removed] = float("inf")
+            seen[removed] = "junk"
+        for node, weight in graph.get_neighbours(removed):
+            neighbour = node.get_id()
+            if not pred.find(neighbour):
+                pred[neighbour] = removed
+                queue.insert_fifo(neighbour)
+    
+    # Return the path and the visited nodes list
+    return inf_map 
 
 def dfs_traversal(
     graph: Graph | LatticeGraph, origin: int, goal: int
