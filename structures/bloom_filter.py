@@ -6,7 +6,11 @@ Joel Mackenzie and Vladimir Morozov
 
 from typing import Any
 from structures.bit_vector import BitVector
+from structures.map import Map
 from math import ceil, log
+import random
+from structures.util import object_to_byte_array
+from structures.entry import Entry
 
 class BloomFilter:
     """
@@ -35,6 +39,8 @@ class BloomFilter:
     def __init__(self, max_keys: int) -> None:
         # You should use max_keys to decide how many bits your bitvector
         # should have, and allocate it accordingly.
+        self._primes = [79, 997, 2477, 7477, 47251, 444443, 999983,
+                        2000003, 4000037, 8003143]
         self._data = BitVector()
         self.max_keys = max_keys # See reference [2] here - This is where the formulas came from
         # More variables here if you need, of course
@@ -42,7 +48,15 @@ class BloomFilter:
         self._bit_array_size =int(ceil(-max_keys*log(self._fp_rate) / log(2)**2))
         self._data.allocate(self._bit_array_size)
         self._num_hashes = int(ceil(self._bit_array_size / self.max_keys * log(2)))
-        self._empty = False
+        self._empty = True
+        self._prime = 0
+        prime_index = 0
+        while self._prime < self._bit_array_size:
+            self._prime = self._primes[prime_index]
+            prime_index += 1
+        self._hash_parameters = Map()
+        for i in range(self._num_hashes):
+            self._hash_parameters[i] = Entry(random.randint(1, self._prime-1), random.randint(0, self._prime-1)) # Entry as dumb tuple
 
     def __str__(self) -> str:
         """
@@ -52,12 +66,18 @@ class BloomFilter:
         """
         pass
 
+    def mad_hash(self, item, n): 
+        return (abs(self._hash_parameters[n].get_key() * int.from_bytes(object_to_byte_array(item), byteorder = 'big')
+                     + self._hash_parameters[n].get_value()) % self._prime) % self._bit_array_size
+
     def insert(self, key: Any) -> None:
         """
         Insert a key into the Bloom filter.
         Time complexity for full marks: O(1)
         """
-        self._empty = True
+        self._empty = False
+        for i in range(self._num_hashes):
+            self._data.set_at(self.mad_hash(key, i))
 
 
     def contains(self, key: Any) -> bool:
@@ -66,7 +86,10 @@ class BloomFilter:
         over k are set. False otherwise.
         Time complexity for full marks: O(1)
         """
-        pass
+        for i in range(self._num_hashes):
+            if self._data.get_at(self.mad_hash(key, i)) == False:
+                return False
+        return True
 
     def __contains__(self, key: Any) -> bool:
         """
