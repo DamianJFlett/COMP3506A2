@@ -134,7 +134,7 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
         temp = queue.remove_from_front()
         removed = temp.get_key()
         data = temp.get_value()
-        if not seen.find(removed):
+        if not seen.find(data):
             visited_order.append(data)
             if not freqs[data]:
                 freqs[data] = 0
@@ -151,13 +151,38 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
     for i in range(visited_order.get_size()):
         x = visited_order[i]
         PQ.insert(freqs[x], DLLNode(x))
-
     while PQ.get_size() > 1:
         f1 = PQ.get_min_priority()
         t1 = PQ.remove_min()
         f2 = PQ.get_min_priority()
         t2 = PQ.remove_min()
-        
+        t = DLLNode(f1+f2)
+        t.set_prev(t1)
+        t.set_next(t2)
+        PQ.insert(f1+f2, t) 
+    f = PQ.get_min_priority()
+    T = PQ.remove_min()
+
+    #  Traverse T
+    codes = Map()
+    stack = DoublyLinkedList()
+    seen = DynamicArray()
+    stack.insert_to_back(Entry(T, ""))
+    while stack.get_size() > 0:
+        temp = stack.remove_from_back()
+        cur = temp.get_key()
+        code = temp.get_value()
+        if (not cur.get_next()) and (not cur.get_prev()):
+            codes[cur.get_data()] = code
+            seen.append(cur.get_data())
+        else:
+            if cur.get_next():
+                stack.insert_to_back(Entry(cur.get_next(), code + "1"))
+            if cur.get_prev():
+                stack.insert_to_back(Entry(cur.get_prev(), code + "0"))
+    i = 0
+    for i in range(seen.get_size()):
+        print(seen[i], ":", codes[seen[i]])
 
     return (coded_sequence, codebook)
 

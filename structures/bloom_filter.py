@@ -42,7 +42,7 @@ class BloomFilter:
         self._primes = [79, 997, 2477, 7477, 47251, 444443, 999983,
                         2000003, 4000037, 8003143]
         self._data = BitVector()
-        self.max_keys = max_keys # See reference [2] here - This is where the formulas came from
+        self.max_keys = max_keys # See reference [2] here - This is where the formulas for the number of hashes and sizeE came from
         # More variables here if you need, of course
         self._fp_rate = 0.1
         self._bit_array_size =int(ceil(-max_keys*log(self._fp_rate) / log(2)**2))
