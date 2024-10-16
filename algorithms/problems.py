@@ -26,7 +26,7 @@ problems. Or maybe not. We did it for you just in case.
 """
 from structures.entry import Entry, Compound, Offer
 from structures.dynamic_array import DynamicArray
-from structures.linked_list import DoublyLinkedList
+from structures.linked_list import DoublyLinkedList, DLLNode
 from structures.bit_vector import BitVector
 from structures.graph import Graph, LatticeGraph
 from structures.map import Map
@@ -77,7 +77,6 @@ def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
     return answer
 
 
-
 def dora(graph: Graph, start: int, symbol_sequence: str,
          ) -> tuple[BitVector, list[Entry]]:
     """
@@ -113,7 +112,6 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
 
     """
     coded_sequence = BitVector()
-
     """
     list of Entry objects, each entry has key=symbol, value=str. The str
     value is just an ASCII representation of the bits used to encode the
@@ -122,6 +120,44 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
     codebook = []
 
     # DO THE THING
+    visited_order = DynamicArray()
+    # Stores the path from the origin to the goal
+    pred = Map()
+    seen = Map()  # glorified set of keys
+    freqs = Map()
+    # ALGO GOES HERE
+    # I LOVE COPYING MY CODE INSTEAD OF ABSTRACTING I DO IT EVERY DAY
+    queue = DoublyLinkedList()
+    queue.insert_to_back(Entry(start, graph.get_node(start).get_data()))
+    pred[start] = "Root"
+    while queue.get_size():
+        temp = queue.remove_from_front()
+        removed = temp.get_key()
+        data = temp.get_value()
+        if not seen.find(removed):
+            visited_order.append(data)
+            if not freqs[data]:
+                freqs[data] = 0
+            freqs[data] += 1
+            seen[removed] = "junk"
+        for node in graph.get_neighbours(removed):
+            neighbour = node.get_id()
+            if not pred.find(neighbour):
+                pred[neighbour] = removed
+                queue.insert_to_back(Entry(neighbour, node.get_data()))
+
+    PQ = PriorityQueue()
+    i = 0
+    for i in range(visited_order.get_size()):
+        x = visited_order[i]
+        PQ.insert(freqs[x], DLLNode(x))
+
+    while PQ.get_size() > 1:
+        f1 = PQ.get_min_priority()
+        t1 = PQ.remove_min()
+        f2 = PQ.get_min_priority()
+        t2 = PQ.remove_min()
+        
 
     return (coded_sequence, codebook)
 
