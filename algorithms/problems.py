@@ -150,20 +150,21 @@ def chain_reaction(compounds: list[Compound]) -> int:
             @compounds@ has up to 10'000 elements
 
     """
+    # the problem is that ids needn't be in orer
     maximal_compound = -1
     current_max = -1
     # DO THE THING
     reacted_with = Map() # store ids directly reacted with 
-    for id, compound1 in enumerate(compounds):
-        for id2, compound2 in enumerate(compounds):
-            if not reacted_with.find(id):
-                reacted_with[id] = DynamicArray()
+    for compound1 in compounds:
+        for compound2 in compounds:
+            if not reacted_with.find(compound1.get_compound_id()):
+                reacted_with[compound1.get_compound_id()] = DynamicArray()
             if _in_rad(compound1, compound2):
-                reacted_with[id].append(id2)
+                reacted_with[compound1.get_compound_id()].append(compound2.get_compound_id())
     # ALGO GOES HERE
     queue = PriorityQueue()
     for i in range(len(compounds) ):
-        queue = PriorityQueue() #redoing fucking bfs 
+        queue = PriorityQueue() #redoing fucking bfs code copying my beloved
         pred = BitVector()
         seen = BitVector()  # glorified set of keys
         pred.allocate(len(compounds))

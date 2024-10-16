@@ -91,7 +91,7 @@ def test_chain_reaction():
     MAX_Y = 100
     # minimum radius is 1, max is 25
     MIN_R = 1
-    MAX_R = 25
+    MAX_R = 10
     # maximum compound count
     COMPOUNDS = 10
 
@@ -105,7 +105,6 @@ def test_chain_reaction():
         if xy_key not in locations:
             compounds.append(Compound(x, y, r, cid))
             locations.add(xy_key)
-
     print ("Generated", len(compounds), "compounds.")
     for compound in compounds:
        print(str(compound))
