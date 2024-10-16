@@ -6,7 +6,7 @@ Joel Mackenzie and Vladimir Morozov
 
 from typing import Any
 from structures.bit_vector import BitVector
-from structures.map import Map
+from structures.dynamic_array import DynamicArray
 from math import ceil, log
 import random
 from structures.util import object_to_byte_array
@@ -44,7 +44,7 @@ class BloomFilter:
         self._data = BitVector()
         self.max_keys = max_keys # See reference [2] here - This is where the formulas came from
         # More variables here if you need, of course
-        self._fp_rate = 0.27
+        self._fp_rate = 0.1
         self._bit_array_size =int(ceil(-max_keys*log(self._fp_rate) / log(2)**2))
         self._data.allocate(self._bit_array_size)
         self._num_hashes = int(ceil(self._bit_array_size / self.max_keys * log(2)))
@@ -54,9 +54,9 @@ class BloomFilter:
         while self._prime < self._bit_array_size:
             self._prime = self._primes[prime_index]
             prime_index += 1
-        self._hash_parameters = Map()
+        self._hash_parameters = DynamicArray()
         for i in range(self._num_hashes):
-            self._hash_parameters[i] = Entry(random.randint(1, self._prime-1), random.randint(0, self._prime-1)) # Entry as dumb tuple
+            self._hash_parameters.append(Entry(random.randint(1, self._prime-1), random.randint(0, self._prime-1))) # Entry as dumb tuple
 
     def __str__(self) -> str:
         """

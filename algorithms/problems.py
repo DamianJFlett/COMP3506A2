@@ -68,13 +68,12 @@ def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
     """
     answer = []  
 
-    bf = BloomFilter(len(database))
+    bf = BloomFilter(len(database)*2)
     for kmer in database:
         bf.insert(kmer)
     for kmer in query:
         if bf.contains(kmer):
             answer.append(kmer)
-
     return answer
 
 
@@ -152,20 +151,46 @@ def chain_reaction(compounds: list[Compound]) -> int:
 
     """
     maximal_compound = -1
-    
+    current_max = -1
     # DO THE THING
-    results = Map() # store number reacted with 
-    for compound in compounds:
-        id = compound.get_compound_id()
-        pass
+    reacted_with = Map() # store ids directly reacted with 
+    for id, compound1 in enumerate(compounds):
+        for id2, compound2 in enumerate(compounds):
+            if not reacted_with.find(id):
+                reacted_with[id] = DynamicArray()
+            if _in_rad(compound1, compound2):
+                reacted_with[id].append(id2)
+    # ALGO GOES HERE
+    queue = PriorityQueue()
+    for i in range(len(compounds) ):
+        queue = PriorityQueue() #redoing fucking bfs 
+        pred = BitVector()
+        seen = BitVector()  # glorified set of keys
+        pred.allocate(len(compounds))
+        seen.allocate(len(compounds))
+        num_reac = 0
+        queue.insert_fifo(i)
+        pred[i] = 1
+        while not queue.is_empty():
+            removed = queue.remove_min()
+            if not seen[removed]:
+                num_reac += 1
+                seen[removed] = 1
+            for j in range(reacted_with[removed].get_size()):
+                node = reacted_with[removed][j]
+                if not pred[node]:
+                    pred[node] = 1
+                    queue.insert_fifo(node)
+        if num_reac > current_max:
+            current_max = num_reac
+            maximal_compound = i
     return maximal_compound
 
-def _in_rad(x1, y1, x2, y2, r):
-    if sqrt((x1-x2)**2+(y1-y2)**2) < r:
+def _in_rad(c1: Compound, c2: Compound):
+    if sqrt((c1.get_coordinates()[0]-c2.get_coordinates()[0])**2+(c1.get_coordinates()[1]-c2.get_coordinates()[1])**2) <= c1.get_radius():
         return True
     else:
         return False
-
 
 def labyrinth(offers: list[Offer]) -> tuple[int, int]:
     """

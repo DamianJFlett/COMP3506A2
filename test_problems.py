@@ -23,6 +23,8 @@ from structures.map import Map
 from structures.pqueue import PriorityQueue
 from structures.bloom_filter import BloomFilter
 from structures.util import Hashable
+import random
+import matplotlib.pyplot as plt
 
 from algorithms.problems import maybe_maybe_maybe, dora, chain_reaction, labyrinth
 
@@ -91,7 +93,7 @@ def test_chain_reaction():
     MIN_R = 1
     MAX_R = 25
     # maximum compound count
-    COMPOUNDS = 100
+    COMPOUNDS = 10
 
     compounds = []
     locations = set() # ensure we do not duplicate x/y coords
@@ -105,12 +107,28 @@ def test_chain_reaction():
             locations.add(xy_key)
 
     print ("Generated", len(compounds), "compounds.")
-    #for compound in compounds:
-    #    print(str(compound))
- 
+    for compound in compounds:
+       print(str(compound))
+
+
+
+
     # You can now run and test your algorithm
     trigger_compound  = chain_reaction(compounds)
+    print("trigger compound is", trigger_compound)
+    plt.axis("equal")
+    ax = plt.gca()
+    ax.set_xlim([MIN_X - MAX_R, MAX_X + MAX_R])
+    ax.set_ylim([MIN_Y - MAX_R, MAX_Y + MAX_R])
 
+    for compound in compounds:
+        x, y = compound.get_coordinates()
+        rand_color = [random.uniform(0.01, 1) for _ in range(3)]
+        plt.plot(x, y, 'o', color=rand_color)
+        circle = plt.Circle((x, y), radius=compound.get_radius(), color=rand_color, alpha=0.2)
+        plt.gca().add_artist(circle)
+        ax.annotate(str(compound.get_compound_id()), (x,y))
+    plt.show()
 
 def test_labyrinth():
     """
