@@ -44,7 +44,7 @@ class BloomFilter:
         self._data = BitVector()
         self.max_keys = max_keys # See reference [2] here - This is where the formulas came from
         # More variables here if you need, of course
-        self._fp_rate = 0.275
+        self._fp_rate = 0.27
         self._bit_array_size =int(ceil(-max_keys*log(self._fp_rate) / log(2)**2))
         self._data.allocate(self._bit_array_size)
         self._num_hashes = int(ceil(self._bit_array_size / self.max_keys * log(2)))

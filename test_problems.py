@@ -121,19 +121,19 @@ def test_labyrinth():
 
     # Set up some params - you should mess with these
     # nodes, n = |V|
-    MIN_N = 10
-    MAX_N = 10000
+    MIN_N = 2
+    MAX_N = 10
     # edges, m = |E|
     MIN_M = 1
-    MAX_M = 50000
+    MAX_M = 10
     # Diameter
     MIN_K = 0
-    MAX_K = 1000
+    MAX_K = 3
     # Cost
     MIN_C = 1
-    MAX_C = 10000
+    MAX_C = 10
     # How many?
-    OFFERS = 10000
+    OFFERS = 10
 
     offers = []
     for oid in range(OFFERS):
@@ -144,11 +144,11 @@ def test_labyrinth():
         offers.append(Offer(n, m, k, c, oid))
 
     print ("Generated", len(offers), "offers.")
-    #for offer in offers:
-    #    print(str(offer))
+    for offer in offers:
+       print(str(offer))
     # You can now run and test your algorithm
     best_offer, cost = labyrinth(offers)
-
+    print(best_offer, cost, "best")
 
 
 # The actual program we're running here

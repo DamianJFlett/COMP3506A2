@@ -33,8 +33,7 @@ from structures.map import Map
 from structures.pqueue import PriorityQueue
 from structures.bloom_filter import BloomFilter
 from structures.util import Hashable
-from pathfinding import bfs_traversal
-from math import sqrt
+from math import sqrt, ceil, log2
 
 
 def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
@@ -69,12 +68,12 @@ def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
     """
     answer = []  
 
-    bf = BloomFilter()
+    bf = BloomFilter(len(database))
     for kmer in database:
         bf.insert(kmer)
     for kmer in query:
         if bf.contains(kmer):
-            answer += kmer
+            answer.append(kmer)
 
     return answer
 
@@ -205,7 +204,7 @@ def labyrinth(offers: list[Offer]) -> tuple[int, int]:
     best_offer_id = -1
     best_offer_cost = float('inf')
 
-    for offer in offers:
+    for offer in offers:    
         if is_valid(offer) and offer.get_cost() < best_offer_cost:
             best_offer_id = offer.get_offer_id()
             best_offer_cost = offer.get_cost()
@@ -213,5 +212,25 @@ def labyrinth(offers: list[Offer]) -> tuple[int, int]:
     return (best_offer_id, best_offer_cost)
 
 def is_valid(offer: Offer) -> bool:
-    pass
+    # "is this a graph checks - if these are somehow superceneded later can get rid of
+    # considering a mapping n, m -> k, starting from a tree m=n-1, fixing n and increasing m, k = n-1, k =n-2, ... k=2 where its
+    # fixed until k=1 at a complete graph 
+    n = offer.get_n()
+    m = offer.get_m()
+    k = offer.get_k()
+    if m > n*(n-1) // 2:
+        return False
+    if m < n-1:
+        return False
+    if m == n*(n-1) // 2 and k < 1:
+        return False
+    if m == n-1 and k < m:
+        return False
+    if n-1 < m and k < successive_halves(n,m):
+        return False
+    return True
 
+def successive_halves(n, m):
+    difference = m - n + 1 
+    m >>= difference
+    return max(m, 2)
