@@ -127,10 +127,10 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
     visited_order = DynamicArray()
     # Stores the path from the origin to the goal
     pred = BitVector()
-    pred.allocate(graph.get_size())
+    pred.allocate(300000)
     seen = BitVector()
     freqs = Map()
-    seen.allocate(graph.get_size())
+    seen.allocate(300000)
     # ALGO GOES HERE
     # I LOVE COPYING MY CODE INSTEAD OF ABSTRACTING
     queue = DoublyLinkedList()

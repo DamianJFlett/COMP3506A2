@@ -165,10 +165,7 @@ class Graph:
         if len(self._nodes) > 0:
             return random.randint(0, len(self._nodes) - 1)
         return None
-
-    def get_size(self) -> int:
-        return len(self._nodes)
-
+    
     def generate_labels(self) -> None:
         """
         Generates a random label for each vertex in self.
