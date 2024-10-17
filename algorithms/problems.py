@@ -28,12 +28,11 @@ from structures.entry import Entry, Compound, Offer
 from structures.dynamic_array import DynamicArray
 from structures.linked_list import DoublyLinkedList, DLLNode
 from structures.bit_vector import BitVector
-from structures.graph import Graph, LatticeGraph
+from structures.graph import Graph
 from structures.map import Map
 from structures.pqueue import PriorityQueue
 from structures.bloom_filter import BloomFilter
-from structures.util import Hashable
-from math import sqrt, ceil, log2
+from math import sqrt
 
 
 def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
@@ -66,8 +65,7 @@ def maybe_maybe_maybe(database: list[str], query: list[str]) -> list[str]:
     You must pass each test in the given time limit and be under the given
     fp_rate to get the associated mark for that test.
     """
-    answer = []  
-
+    answer = []
     bf = BloomFilter(len(database)*2)
     for kmer in database:
         bf.insert(kmer)
@@ -223,7 +221,8 @@ def chain_reaction(compounds: list[Compound]) -> int:
             if not reacted_with.find(compound1.get_compound_id()):
                 reacted_with[compound1.get_compound_id()] = DynamicArray()
             if _in_rad(compound1, compound2):
-                reacted_with[compound1.get_compound_id()].append(compound2.get_compound_id())
+                reacted_with[compound1.get_compound_id()].append(
+                    compound2.get_compound_id())
     # ALGO GOES HERE
     queue = PriorityQueue()
     for i in range(len(compounds) ):
@@ -250,11 +249,13 @@ def chain_reaction(compounds: list[Compound]) -> int:
             maximal_compound = i
     return maximal_compound
 
+
 def _in_rad(c1: Compound, c2: Compound):
     if sqrt((c1.get_coordinates()[0]-c2.get_coordinates()[0])**2+(c1.get_coordinates()[1]-c2.get_coordinates()[1])**2) <= c1.get_radius():
         return True
     else:
         return False
+
 
 def labyrinth(offers: list[Offer]) -> tuple[int, int]:
     """
@@ -300,9 +301,12 @@ def labyrinth(offers: list[Offer]) -> tuple[int, int]:
 
     return (best_offer_id, best_offer_cost)
 
+
 def is_valid(offer: Offer) -> bool:
-    # "is this a graph checks - if these are somehow superceneded later can get rid of
-    # considering a mapping n, m -> k, starting from a tree m=n-1, fixing n and increasing m, k = n-1, k =n-2, ... k=2 where its
+    # "is this a graph" checks - if these are somehow superceneded later
+    #  can get rid of considering a mapping n, m -> k, 
+    #  starting from a tree m=n-1, fixing
+    #  n and increasing m, k = n-1, k =n-2, ... k=2 where its
     # fixed until k=1 at a complete graph 
     n = offer.get_n()
     m = offer.get_m()
@@ -319,7 +323,8 @@ def is_valid(offer: Offer) -> bool:
         return False
     return True
 
+
 def successive_halves(n, m):
-    difference = m - n + 1 
+    difference = m - n + 1
     m >>= difference
     return max(m, 2)
