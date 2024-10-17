@@ -70,7 +70,7 @@ def test_dora(graph: Graph):
     # You will also need to set up a sequence to encode. The sequence should
     # be drawn from the symbols in the reachable component of G from the
     # given start node. Look at Figure 8 in the spec.
-    sequence = ""
+    sequence = "PATCH"
 
     codeword, codebook = dora(graph, start, sequence)
 

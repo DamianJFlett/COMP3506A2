@@ -134,9 +134,9 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
         temp = queue.remove_from_front()
         removed = temp.get_key()
         data = temp.get_value()
-        if not seen.find(data):
-            visited_order.append(data)
+        if not seen.find(removed):
             if not freqs[data]:
+                visited_order.append(data)
                 freqs[data] = 0
             freqs[data] += 1
             seen[removed] = "junk"
@@ -145,7 +145,6 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
             if not pred.find(neighbour):
                 pred[neighbour] = removed
                 queue.insert_to_back(Entry(neighbour, node.get_data()))
-
     PQ = PriorityQueue()
     i = 0
     for i in range(visited_order.get_size()):
@@ -181,8 +180,11 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
             if cur.get_prev():
                 stack.insert_to_back(Entry(cur.get_prev(), code + "0"))
     i = 0
-    for i in range(seen.get_size()):
-        print(seen[i], ":", codes[seen[i]])
+    for i in range(visited_order.get_size()):
+        codebook.append(Entry(seen[i], codes[seen[i]]))
+    for char in symbol_sequence:
+        for bit in codes[char]:
+            coded_sequence.append(int(bit))
 
     return (coded_sequence, codebook)
 
@@ -225,7 +227,7 @@ def chain_reaction(compounds: list[Compound]) -> int:
     # ALGO GOES HERE
     queue = PriorityQueue()
     for i in range(len(compounds) ):
-        queue = PriorityQueue() #redoing fucking bfs code copying my beloved
+        queue = PriorityQueue() # redoing fucking bfs code copying my beloved
         pred = BitVector()
         seen = BitVector()  # glorified set of keys
         pred.allocate(len(compounds))
