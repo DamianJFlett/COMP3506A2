@@ -106,6 +106,7 @@ class LatticeNode(Node):
     def id_from_coordinates(self, rows: int) -> int:
         return self._col * rows + self._row
 
+
     def disconnect(self) -> None:
         if self._north is not None:
             self._north._south = None
@@ -164,6 +165,9 @@ class Graph:
         if len(self._nodes) > 0:
             return random.randint(0, len(self._nodes) - 1)
         return None
+
+    def get_size(self) -> int:
+        return len(self._nodes)
 
     def generate_labels(self) -> None:
         """

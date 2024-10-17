@@ -12,6 +12,7 @@ import random
 from structures.util import object_to_byte_array
 from structures.entry import Entry
 
+
 class BloomFilter:
     """
     A BloomFilter uses a BitVector as a container. To insert a given key, we
@@ -42,12 +43,16 @@ class BloomFilter:
         self._primes = [79, 997, 2477, 7477, 47251, 444443, 999983,
                         2000003, 4000037, 8003143]
         self._data = BitVector()
-        self.max_keys = max_keys # See reference [2] here - This is where the formulas for the number of hashes and sizeE came from
+        self.max_keys = max_keys  # See reference [2] here
+        # - This is where the formulas for the number of hashes and size
+        # came from
         # More variables here if you need, of course
         self._fp_rate = 0.1
-        self._bit_array_size =int(ceil(-max_keys*log(self._fp_rate) / log(2)**2))
+        self._bit_array_size = int(ceil(
+            -max_keys*log(self._fp_rate) / log(2)**2))
         self._data.allocate(self._bit_array_size)
-        self._num_hashes = int(ceil(self._bit_array_size / self.max_keys * log(2)))
+        self._num_hashes = int(ceil(
+            self._bit_array_size / self.max_keys * log(2)))
         self._empty = True
         self._prime = 0
         prime_index = 0
@@ -56,7 +61,8 @@ class BloomFilter:
             prime_index += 1
         self._hash_parameters = DynamicArray()
         for i in range(self._num_hashes):
-            self._hash_parameters.append(Entry(random.randint(1, self._prime-1), random.randint(0, self._prime-1))) # Entry as dumb tuple
+            self._hash_parameters.append(Entry(random.randint(
+                1, self._prime-1), random.randint(0, self._prime-1)))
 
     def __str__(self) -> str:
         """
@@ -66,9 +72,11 @@ class BloomFilter:
         """
         pass
 
-    def mad_hash(self, item, n): 
-        return (abs(self._hash_parameters[n].get_key() * int.from_bytes(object_to_byte_array(item), byteorder = 'big')
-                     + self._hash_parameters[n].get_value()) % self._prime) % self._bit_array_size
+    def mad_hash(self, item, n):
+        return (abs(self._hash_parameters[n].get_key() * int.from_bytes(
+            object_to_byte_array(item), byteorder='big')
+                     + self._hash_parameters[n].get_value()) % self._prime) % (
+                         self._bit_array_size)
 
     def insert(self, key: Any) -> None:
         """
@@ -78,7 +86,6 @@ class BloomFilter:
         self._empty = False
         for i in range(self._num_hashes):
             self._data.set_at(self.mad_hash(key, i))
-
 
     def contains(self, key: Any) -> bool:
         """
@@ -113,4 +120,3 @@ class BloomFilter:
         Time complexity for full marks: O(1)
         """
         return self._bit_array_size
-
