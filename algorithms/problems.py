@@ -6,14 +6,14 @@ Joel Mackenzie and Vladimir Morozov
  Each problem will be assessed on three sets of tests:
 
 1. "It works":
-       Basic inputs and outputs, including the ones peovided as examples, 
+       Basic inputs and outputs, including the ones peovided as examples,
        with generous time and memory restrictions.
        Large inputs will not be tested here.
        The most straightforward approach will
        likely fit into these restrictions.
 
 2. "Exhaustive":
-       Extensive testing on a wide range of inputs and outputs with tight 
+       Extensive testing on a wide range of inputs and outputs with tight
        time and memory restrictions.
        These tests won't accept brute force solutions, you'll have to apply
        some algorithms and optimisations.
@@ -126,7 +126,8 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
     # DO THE THING
     visited_order = DynamicArray()
     # Stores the path from the origin to the goal
-    pred = Map()
+    pred = BitVector()
+    pred.allocate(graph.get_size())
     seen = BitVector()
     freqs = Map()
     seen.allocate(graph.get_size())
@@ -134,7 +135,7 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
     # I LOVE COPYING MY CODE INSTEAD OF ABSTRACTING
     queue = DoublyLinkedList()
     queue.insert_to_back(Entry(start, graph.get_node(start).get_data()))
-    pred[start] = "Root"
+    pred[start] = 1
     while queue.get_size():
         temp = queue.remove_from_front()
         removed = temp.get_key()
@@ -147,8 +148,8 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
             seen[removed] = 1
         for node in graph.get_neighbours(removed):
             neighbour = node.get_id()
-            if not pred.find(neighbour):
-                pred[neighbour] = removed
+            if not pred[neighbour]:
+                pred[neighbour] = 1
                 queue.insert_to_back(Entry(neighbour, node.get_data()))
     PQ = PriorityQueue()
     temp = DynamicArray()
@@ -188,7 +189,6 @@ def dora(graph: Graph, start: int, symbol_sequence: str,
     i = 0
     for i in range(visited_order.get_size()):
         codebook.append(Entry(seen[i], codes[seen[i]]))
-        print(seen[i], ":", codes[seen[i]])
     for char in symbol_sequence:
         for bit in codes[char]:
             coded_sequence.append(int(bit))
@@ -305,7 +305,7 @@ def labyrinth(offers: list[Offer]) -> tuple[int, int]:
     best_offer_id = -1
     best_offer_cost = float('inf')
 
-    for offer in offers:  
+    for offer in offers:
         if is_valid(offer) and offer.get_cost() < best_offer_cost:
             best_offer_id = offer.get_offer_id()
             best_offer_cost = offer.get_cost()
@@ -330,7 +330,7 @@ def is_valid(offer: Offer) -> bool:
         return False
     if m == n-1 and k < m:
         return False
-    if n-1 < m and k < successive_halves(n,m):
+    if n-1 < m and k < successive_halves(n, m):
         return False
     return True
 

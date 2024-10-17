@@ -24,6 +24,7 @@ from structures.dynamic_array import DynamicArray
 from structures.linked_list import DoublyLinkedList
 from structures.util import object_to_byte_array
 
+
 class Map:
     """
     An implementation of the Map ADT.
@@ -52,37 +53,39 @@ class Map:
         for i in range(self._primes[self._prime_index - 1]):
             chain = self._arr[i]
             chain_cur = chain.get_head_node()
-            
+
             while chain_cur:
                 entry = chain_cur.get_data()
                 new_index = self._compress(self._get_hash(entry.get_key()))
-                
+
                 if new_index != i:
                     self._arr[i].find_and_remove_element(entry)
                     self._arr[new_index].insert_to_back(entry)
-                
+
                 chain_cur = chain_cur.get_next()
 
     def insert(self, entry: Entry) -> Any | None:
         """
         Associate value v with key k for efficient lookups. If k already exists
         in your map, you must return the old value associated with k. Return
-        None otherwise. (We will not use None as a key or a value in our tests).
+        None otherwise. (We will not use None as a key or a value in our tests
         Time complexity for full marks: O(1*)
         """
         key = entry.get_key()
         if self.get_load_factor() > 1:
             self._rehash()
-        chain_cur = self._arr[self._compress(self._get_hash(key))].get_head_node()
+        chain_cur = self._arr[
+            self._compress(self._get_hash(key))].get_head_node()
         if not chain_cur:
-            self._arr[self._compress(self._get_hash(key))].insert_to_back(entry)
+            self._arr[
+                self._compress(self._get_hash(key))].insert_to_back(entry)
             self._size += 1
             return
         while chain_cur:
             if chain_cur.get_data().get_key() == key:
                 old_value = chain_cur.get_data().get_value()
                 chain_cur.set_data(entry)
-                return old_value 
+                return old_value
             chain_cur = chain_cur.get_next()
         self._arr[self._compress(self._get_hash(key))].insert_to_back(entry)
         self._size += 1
@@ -123,7 +126,9 @@ class Map:
         data structure. Don't return anything.
         Time complexity for full marks: O(1*)
         """
-        if self._arr[self._compress(self._get_hash(key))].find_and_remove_element(Entry(key, self[key])):
+        if self._arr[self._compress(
+                self._get_hash(key))].find_and_remove_element(
+                    Entry(key, self[key])):
             self._size -= 1
 
     def find(self, key: Any) -> Any | None:
@@ -132,10 +137,11 @@ class Map:
         exists; return None otherwise.
         Time complexity for full marks: O(1*)
         """
-        chain_cur = self._arr[self._compress(self._get_hash(key))].get_head_node()
+        chain_cur = self._arr[self._compress(
+            self._get_hash(key))].get_head_node()
         while chain_cur:
             if chain_cur.get_data().get_key() == key:
-                return chain_cur.get_data().get_value() 
+                return chain_cur.get_data().get_value()
             chain_cur = chain_cur.get_next()
         return
 

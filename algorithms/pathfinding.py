@@ -11,13 +11,11 @@ from structures.dynamic_array import DynamicArray
 from structures.graph import Graph, LatticeGraph
 from structures.map import Map
 from structures.pqueue import PriorityQueue
-from structures.bloom_filter import BloomFilter
-from structures.util import Hashable
 
 
 def bfs_traversal(
     graph: Graph | LatticeGraph, origin: int, goal: int
-    ) -> tuple[DynamicArray, DynamicArray]:
+      ) -> tuple[DynamicArray, DynamicArray]:
     """
     Task 2.1: Breadth First Search
 
@@ -60,7 +58,6 @@ def bfs_traversal(
             if not pred.find(neighbour):
                 pred[neighbour] = removed
                 queue.insert_fifo(neighbour)
-    
     # Return the path and the visited nodes list
     return (path, visited_order)
 
@@ -82,25 +79,9 @@ def dijkstra_traversal(graph: Graph, origin: int) -> DynamicArray:
     This is because there is no inherent weight on an edge of these
     graphs. It should of course work where edge weights are uniform.
     """
-def dijkstra_traversal(graph: Graph, origin: int) -> DynamicArray:
-    """
-    Task 2.2: Dijkstra Traversal
 
-    @param: graph
-      The *weighted* graph to process (POSW graphs)
-    @param: origin
-      The ID of the node from which to start traversal.
-
-    @returns: DynamicArray containing Entry types.
-      The Entry key is a node identifier, Entry value is the cost of the
-      shortest path to this node from the origin.
-
-    NOTE: Dijkstra does not work (by default) on LatticeGraph types.
-    This is because there is no inherent weight on an edge of these
-    graphs. It should of course work where edge weights are uniform.
-    """
-
-    #  I'm sure like 50% of this is redundant but it passes the tests and i'm not spending another second of my life on this
+    #  I'm sure like 50% of this is redundant but it passes the tests and
+    #  i'm not spending another second of my life on this
     queue = PriorityQueue()
     valid_locations = DynamicArray()  # This holds your answers
     distances = _inf_map(graph, origin)
@@ -124,9 +105,11 @@ def dijkstra_traversal(graph: Graph, origin: int) -> DynamicArray:
     # Return the DynamicArray containing Entry types
     return valid_locations
 
+
 def _inf_map(graph, origin):
     """
-    Horror code copying to iterate through and get all the nodes, outputting a map where all of them are mapped to inf
+    Horror code copying to iterate through and get all the nodes, outputting
+    a map where all of them are mapped to inf
     """
     # Stores the keys of the nodes in the order they were visited
     # Stores the path from the origin to the goal
@@ -147,13 +130,13 @@ def _inf_map(graph, origin):
             if not pred.find(neighbour):
                 pred[neighbour] = removed
                 queue.insert_fifo(neighbour)
-    
     # Return the path and the visited nodes list
-    return inf_map 
+    return inf_map
+
 
 def dfs_traversal(
     graph: Graph | LatticeGraph, origin: int, goal: int
-    ) -> tuple[DynamicArray, DynamicArray]: 
+      ) -> tuple[DynamicArray, DynamicArray]:
     """
     Task 2.3: Depth First Search **** COMP7505 ONLY ****
     COMP3506 students can do this for funsies.
@@ -169,7 +152,6 @@ def dfs_traversal(
       1. The ordered path between the origin and the goal in node IDs
       (or an empty DynamicArray if no path exists);
       2. The IDs of all nodes in the order they were visited.
-    
     """
     # Stores the keys of the nodes in the order they were visited
     visited_order = DynamicArray()
@@ -180,6 +162,3 @@ def dfs_traversal(
 
     # Return the path and the visited nodes list
     return (path, visited_order)
-
-
-
